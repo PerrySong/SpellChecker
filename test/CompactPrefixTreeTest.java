@@ -137,6 +137,7 @@ public class CompactPrefixTreeTest {
                     }
                     for (int i = 0; i <= line.length(); i++) {
                         if (!d.checkPrefix(line.substring(0, i))) {
+                            System.out.println(d.checkPrefix(line.substring(0, i)));
                             Assert.fail("Failed to find prefix: " + line.substring(0, i) + " of " + line);
                         }
                     }
