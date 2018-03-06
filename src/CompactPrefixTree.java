@@ -217,33 +217,6 @@ public class CompactPrefixTree implements Dictionary {
         return false;
     }
 
-    /**
-     * This method find the nearest n words of the node
-     * @param node
-     * @param result
-     * @return
-     */
-//    private String[] addNChildrenSuffix(String[] result, Node node, int index){
-//        //If the result is full, return result
-//        if(index >= result.length) return result;
-//        //If the node's prefix isWord, add it to result
-//        if(node.isWord) {
-//            this.addWord(result, node.prefix);
-//            index++;
-//        }
-//        for(Node child: node.children) {
-//            if(child != null) {
-//                this.addNChildrenSuffix(result, child);
-//            }
-//        }
-//        return result;//There is not enough child suffix
-//    }
-
-    private void addWord(String[] res, String word) {
-        for(String elem: res) {
-            if(elem == null) elem = word;
-        }
-    }
 
     /**
      *  A private add method that adds a given string to the tree
@@ -261,14 +234,7 @@ public class CompactPrefixTree implements Dictionary {
             return node;
         }
 
-        //Base case: it is the root of the prefix tree
-        if(node.prefix.equals("")) {
-            int i = s.charAt(0) - 'a';
-            node.addChild(add(s, node.children[i]));
-            return node;
-        }
-
-        //Base case, if the prefix is s
+        //Base case, if the prefix is a word
         if(s.equals(node.prefix)) {
             node.isWord();
             return node;
