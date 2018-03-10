@@ -359,9 +359,10 @@ public class CompactPrefixTree implements Dictionary {
      */
     private boolean checkPrefix(String prefix, Node node) {
         //If the tree is empty,then the word is not in the tree
+        System.out.println(prefix);
         if(node == null) return false;
         //If find the prefix, return true.
-        if(prefix.equals(node.prefix)) {
+        if(prefix.equals(this.comPrefix(prefix, node.prefix))) {
             return true;
         }
         if(this.comPrefix(prefix, node.prefix).equals(node.prefix)) {
