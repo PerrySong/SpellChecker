@@ -207,7 +207,6 @@ public class CompactPrefixTree implements Dictionary {
                 else
                     return suggest(word.substring(0, word.length() - 2), numSuggestions, root, "");
             }
-
             return result;
         }
         return this.suggest(suffix, numSuggestions, child, currentPrefix += node.prefix);//Update the current prefix
