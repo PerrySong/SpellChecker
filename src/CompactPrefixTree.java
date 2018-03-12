@@ -167,7 +167,8 @@ public class CompactPrefixTree implements Dictionary {
                 else {
                     //If the findTheClosestSuffix return null, it means there is no more similar word under this node
                     //So we deduct the last letter of the word, and pass it to the suggest function again
-                    return suggest((currentPrefix + word + node.prefix).substring(0, (currentPrefix + word + node.prefix).length() - 3), numSuggestions, root, "");
+                    String wholeWord = currentPrefix + node.prefix;
+                    return suggest(wholeWord.substring(0, wholeWord.length() - 2), numSuggestions, root, "");
                 }
 
             }
@@ -185,7 +186,8 @@ public class CompactPrefixTree implements Dictionary {
                 if(this.findTheClosestSuffix(node, result, currentPrefix) != null)
                     result[i] = currentPrefix + this.findTheClosestSuffix(node, result, currentPrefix);
                 else{
-                    return suggest((currentPrefix + word + node.prefix).substring(0, (currentPrefix + word + node.prefix).length() - 3), numSuggestions, root, "");
+                    String wholeWord = currentPrefix + node.prefix;
+                    return suggest(wholeWord.substring(0, wholeWord.length() - 2), numSuggestions, root, "");
                 }
 //
             }
