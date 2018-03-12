@@ -152,32 +152,17 @@ public class CompactPrefixTree implements Dictionary {
             result[0] = currentPrefix + node.prefix;
             return result;
 
-        } else if(word.equals(node.prefix)) {
+        } else if(word.equals(node.prefix) || !this.comPrefix(word, node.prefix).equals(node.prefix)) {
             //Base case 2: If word matches the current node's prefix, but it is not a word
+            // || Base Case 3:
+            // If the maximum common prefix does not match the node's prefix
+            //Or the word is not a word
+            //We suggest prefix + ClosestSuffix;
             //We advance the node
             String[] result = new String[numSuggestions];
             //Find certain number of suggested word
-            for(int i = 0; i < numSuggestions; i++) {
-                if(this.findTheClosestSuffix(node, result, currentPrefix) != null)
-                    result[i] = currentPrefix + this.findTheClosestSuffix(node, result, currentPrefix);
-                else
-                    //If the findTheClosestSuffix return null, it means there is no more similar word under this node
-                    //So we deduct the last letter of the word, and pass it to the suggest function again
-                    return suggest(word.substring(0, word.length() - 2), numSuggestions, root, "");
-            }
-            return result;
-        } else
-
-        //Base Case 3:
-        //If the maximum common prefix does not match the node's prefix
-        //Or the word is not a word
-        //We suggest prefix + ClosestSuffix;
-        if(!this.comPrefix(word, node.prefix).equals(node.prefix)) {
-            //Create result
-            //Find certain number closest suffix
-            String[] result = new String[numSuggestions];
-            for(int i = 0; i < numSuggestions; i++) {
-                if(this.findTheClosestSuffix(node, result, currentPrefix) != null)
+            for (int i = 0; i < numSuggestions; i++) {
+                if (this.findTheClosestSuffix(node, result, currentPrefix) != null)
                     result[i] = currentPrefix + this.findTheClosestSuffix(node, result, currentPrefix);
                 else
                     //If the findTheClosestSuffix return null, it means there is no more similar word under this node
