@@ -137,7 +137,6 @@ public class CompactPrefixTreeTest {
                     }
                     for (int i = 0; i <= line.length(); i++) {
                         if (!d.checkPrefix(line.substring(0, i))) {
-                            System.out.println(d.checkPrefix(line.substring(0, i)));
                             Assert.fail("Failed to find prefix: " + line.substring(0, i) + " of " + line);
                         }
                     }
@@ -162,15 +161,15 @@ public class CompactPrefixTreeTest {
 
         String goodWords[] = { "cat", "baseball", "original"};
         for (int i = 0; i < goodWords.length; i++)  {
-                String result[] = d.suggest(goodWords[i], NUM_SUGGESTIONS);
-                if (result == null) {
-                    Assert.fail("Your suggest method returned a null.");
-                }
-                if (result.length != 1) {
-                    System.out.println("Word " + goodWords[i] + " is in the dictionary -- suggest should return 1 item");
-                    System.out.println("   " + result.length + " items returned instead");
-                    Assert.fail();
-                }
+            String result[] = d.suggest(goodWords[i], NUM_SUGGESTIONS);
+            if (result == null) {
+                Assert.fail("Your suggest method returned a null.");
+            }
+            if (result.length != 1) {
+                System.out.println("Word " + goodWords[i] + " is in the dictionary -- suggest should return 1 item");
+                System.out.println("   " + result.length + " items returned instead");
+                Assert.fail();
+            }
         }
 
         String badWords[] = {"accer", "fatte", "flox", "forg", "forsoom"};
@@ -195,4 +194,3 @@ public class CompactPrefixTreeTest {
     }
 
 }
-

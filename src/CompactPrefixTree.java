@@ -1,3 +1,4 @@
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 
 import java.io.*;
@@ -192,6 +193,7 @@ public class CompactPrefixTree implements Dictionary {
         //Advance to corresponding child node, if the child node is null
         if(child == null) {
             String[] result = new String[numSuggestions];
+
             for(int i = 0; i < numSuggestions; i++) {
                 if(this.findTheClosestSuffix(node, result, currentPrefix) != null)
                     result[i] = currentPrefix + this.findTheClosestSuffix(node, result, currentPrefix);
