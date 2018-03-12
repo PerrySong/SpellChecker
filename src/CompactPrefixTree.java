@@ -109,18 +109,8 @@ public class CompactPrefixTree implements Dictionary {
         }
     }
 
-    public String buildTree(String empty, Node node, StringBuilder result) {
-        if(node == null) return "";
-        if(node.isWord) {
-            result.append(empty + node.prefix + "*\n");
-        } else {
-            result.append(empty + node.prefix + "\n");
-        }
-        for(Node child: node.children) {
-            buildTree(empty + "  ", child, result);
-        }
-        return result.toString();
-    }
+
+
 
 
     /**
@@ -140,19 +130,22 @@ public class CompactPrefixTree implements Dictionary {
      */
 
     public String[] suggest(String word, int numSuggestions) {
-        // FILL IN CODE
-        // Note: you need to create a private suggest method in this class
-        // (like we did for methods add, check, checkPrefix)
-
-
-
-        return this.suggest(word, numSuggestions, this.root, ""); // don't forget to change it
+        return this.suggest(word, numSuggestions, this.root, "");
     }
 
     // ---------- Private helper methods ---------------
 
+    /**
+     * This method will find a certain number of closest word of given word, but note that it is not
+     * perfect, some bug might occur if the tree do not have as many word as we want to find
+     * @param word
+     * @param numSuggestions
+     * @param node
+     * @param currentPrefix: We sum up the currentPrefix to form the corresponding word
+     * @return An array of suggested word
+     */
     private String[] suggest(String word, int numSuggestions, Node node, String currentPrefix) {
-        //Base case 1: If word is a word
+        //Base case 1: If word is a word, we return that word
         if(this.check(currentPrefix + word)) {
             String[] result = new String[1];
             result[0] = currentPrefix + node.prefix;
@@ -160,16 +153,17 @@ public class CompactPrefixTree implements Dictionary {
 
         } else if(word.equals(node.prefix)) {
             //Base case 2: If word matches the current node's prefix, but it is not a word
-            //We advance
+            //We advance the node
             String[] result = new String[numSuggestions];
-
+            //Find certain number of suggested word
             for(int i = 0; i < numSuggestions; i++) {
                 if(this.findTheClosestSuffix(node, result, currentPrefix) != null)
                     result[i] = currentPrefix + this.findTheClosestSuffix(node, result, currentPrefix);
                 else
+                    //If the findTheClosestSuffix return null, it means there is no more similar word under this node
+                    //So we deduct the last letter of the word, and pass it to the suggest function again
                     return suggest(word.substring(0, word.length() - 2), numSuggestions, root, "");
             }
-
             return result;
         } else
 
@@ -180,24 +174,22 @@ public class CompactPrefixTree implements Dictionary {
         if(!this.comPrefix(word, node.prefix).equals(node.prefix)) {
             //Create result
             //Find certain number closest suffix
-            System.out.println("Word: " + word + " Prefix: " + node.prefix);
-            System.out.println("Comm prefix:" + this.comPrefix(word, node.prefix));
             String[] result = new String[numSuggestions];
-
             for(int i = 0; i < numSuggestions; i++) {
                 if(this.findTheClosestSuffix(node, result, currentPrefix) != null)
                     result[i] = currentPrefix + this.findTheClosestSuffix(node, result, currentPrefix);
                 else
+                    //If the findTheClosestSuffix return null, it means there is no more similar word under this node
+                    //So we deduct the last letter of the word, and pass it to the suggest function again
                     return suggest(word.substring(0, word.length() - 2), numSuggestions, root, "");
             }
-
             return result;
         }
 
-        //Other wise, the prefix of the node does match the word's prefix . We advance the node
+        //Other wise, the prefix of the node does match the word's prefix(Not whole word). We advance the node
         String suffix = this.suffix(word, node.prefix);
         Node child = node.children[this.getIndexOfCharacter(suffix)];
-
+        //Advance to corresponding child node, if the child node is null
         if(child == null) {
             String[] result = new String[numSuggestions];
 
@@ -209,6 +201,7 @@ public class CompactPrefixTree implements Dictionary {
             }
             return result;
         }
+        //Advance to next level
         return this.suggest(suffix, numSuggestions, child, currentPrefix += node.prefix);//Update the current prefix
     }
 
@@ -226,17 +219,25 @@ public class CompactPrefixTree implements Dictionary {
         }
         Node child;
         currentPrefix += node.prefix;
+        //Search for 26 child for the closest word
         for(int i = 0; i < 26; i++) {
             child = node.children[i];
             if(child != null && findTheClosestSuffix(child, rec, currentPrefix) != null)
                 return node.prefix + findTheClosestSuffix(child, rec, currentPrefix);
         }
+        //If we can not find a new closest suffix, we return null, and the suggest method will
+        //search the suggest words again with the search word input deducted the last letter.
         return null;
     }
 
+    /**This method return true if the word is already in String array rec, otherwise return false
+     *
+     * @param rec
+     * @param word
+     * @return
+     */
     private boolean recommended(String[] rec, String word) {
         for(String elem: rec) {
-            System.out.println("Cur elem is: " + elem + "   Cur word is: " + word);
             if(word.equals(elem)) return true;
         }
         return false;
@@ -325,6 +326,27 @@ public class CompactPrefixTree implements Dictionary {
         return s1.substring(0, i);
     }
 
+
+    /**
+     *
+     * @param empty
+     * @param node
+     * @param result
+     * @return The String representing the tree
+     */
+    private String buildTree(String empty, Node node, StringBuilder result) {
+        if(node == null) return "";
+        if(node.isWord) {
+            result.append(empty + node.prefix + "*\n");
+        } else {
+            result.append(empty + node.prefix + "\n");
+        }
+        for(Node child: node.children) {
+            buildTree(empty + "  ", child, result);
+        }
+        return result.toString();
+    }
+
     /** A private method to check whether a given string is stored in the tree.
      *
      * @param s the string to check
@@ -358,7 +380,6 @@ public class CompactPrefixTree implements Dictionary {
      */
     private boolean checkPrefix(String prefix, Node node) {
         //If the tree is empty,then the word is not in the tree
-        System.out.println(prefix);
         if(node == null) return false;
         //If find the prefix, return true.
         if(prefix.equals(this.comPrefix(prefix, node.prefix))) {
@@ -432,11 +453,12 @@ public class CompactPrefixTree implements Dictionary {
         }
     }
 
+    //Personal small test cases.
     public static void main(String[] args) {
         CompactPrefixTree a = new CompactPrefixTree();
         System.out.println("apple and ape common prefix is: " + a.comPrefix("apple", "ape"));
         a.add("apple");
-//        a.add("ape");
+        a.add("ape");
         a.add("able");
         a.add("zebra");
         a.add("cart");
@@ -445,7 +467,7 @@ public class CompactPrefixTree implements Dictionary {
         a.print();
         System.out.println(a.check("zebra"));
         a.printTree("you.txt");
-//        System.out.println(a.check("z"));
+        System.out.println(a.check("z"));
         CompactPrefixTree c = new CompactPrefixTree();
         System.out.println("Hey: ");
         CompactPrefixTree b = new CompactPrefixTree("words_ospd.txt");
