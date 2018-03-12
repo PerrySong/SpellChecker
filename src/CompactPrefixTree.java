@@ -164,10 +164,12 @@ public class CompactPrefixTree implements Dictionary {
             for (int i = 0; i < numSuggestions; i++) {
                 if (this.findTheClosestSuffix(node, result, currentPrefix) != null)
                     result[i] = currentPrefix + this.findTheClosestSuffix(node, result, currentPrefix);
-                else
+                else {
                     //If the findTheClosestSuffix return null, it means there is no more similar word under this node
                     //So we deduct the last letter of the word, and pass it to the suggest function again
-                    return suggest(word.substring(0, word.length() - 2), numSuggestions, root, "");
+                    return suggest((currentPrefix + word + node.prefix).substring(0, (currentPrefix + word + node.prefix).length() - 3), numSuggestions, root, "");
+                }
+
             }
             return result;
         }
@@ -182,8 +184,10 @@ public class CompactPrefixTree implements Dictionary {
             for(int i = 0; i < numSuggestions; i++) {
                 if(this.findTheClosestSuffix(node, result, currentPrefix) != null)
                     result[i] = currentPrefix + this.findTheClosestSuffix(node, result, currentPrefix);
-                else
-                    return suggest(word.substring(0, word.length() - 2), numSuggestions, root, "");
+                else{
+                    return suggest((currentPrefix + word + node.prefix).substring(0, (currentPrefix + word + node.prefix).length() - 3), numSuggestions, root, "");
+                }
+//
             }
             return result;
         }
