@@ -202,7 +202,7 @@ public class CompactPrefixTree implements Dictionary {
         Node child;
         currentPrefix += node.prefix;
         //Search for 26 child for the closest word
-        for(int i = 0; i < 26; i++) { 
+        for(int i = 0; i < 26; i++) {
             child = node.children[i];
             if(child != null && findTheClosestSuffix(child, rec, currentPrefix) != null)
                 return node.prefix + findTheClosestSuffix(child, rec, currentPrefix);
