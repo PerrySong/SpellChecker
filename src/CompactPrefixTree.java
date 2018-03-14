@@ -84,17 +84,7 @@ public class CompactPrefixTree implements Dictionary {
         printTree("", this.root);
     }
 
-    private void printTree(String empty, Node node) {
-        if(node == null) return;
-        if(node.isWord) {
-            System.out.println(empty + node.prefix + "*");
-        } else {
-            System.out.println(empty + node.prefix);
-        }
-        for(Node child: node.children) {
-            printTree(empty + "  ", child);
-        }
-    }
+
 
     /**
      * Print out the nodes of the tree to a file, using indentations to specify the level
@@ -310,7 +300,7 @@ public class CompactPrefixTree implements Dictionary {
      * @param s2 the second string of a tree
      * @return The String of the maximum common prefix
      */
-    public String comPrefix(String s1, String s2) {
+    private String comPrefix(String s1, String s2) {
         int i = 0;
         while(i < s1.length() && i < s2.length() && s1.charAt(i) == s2.charAt(i)) {
             i++;
@@ -442,6 +432,23 @@ public class CompactPrefixTree implements Dictionary {
          */
         public void isWord() {
             this.isWord = true;
+        }
+    }
+
+    /**
+     * This method is a private helper method of print
+     * @param empty
+     * @param node
+     */
+    private void printTree(String empty, Node node) {
+        if(node == null) return;
+        if(node.isWord) {
+            System.out.println(empty + node.prefix + "*");
+        } else {
+            System.out.println(empty + node.prefix);
+        }
+        for(Node child: node.children) {
+            printTree(empty + "  ", child);
         }
     }
 
