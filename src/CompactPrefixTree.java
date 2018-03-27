@@ -142,7 +142,7 @@ public class CompactPrefixTree implements Dictionary {
             result[0] = currentPrefix + node.prefix;
             return result;
 
-        } else if(word.equals(node.prefix) || !this.comPrefix(word, node.prefix).equals(node.prefix)) {
+        } else if(word.equals(node.prefix) && !node.isWord || !this.comPrefix(word, node.prefix).equals(node.prefix)) {
             //Base case 2: If word matches the current node's prefix, but it is not a word
             // || Base Case 3:
             // If the maximum common prefix does not match the node's prefix
@@ -157,10 +157,10 @@ public class CompactPrefixTree implements Dictionary {
                 else {
                     //If the findTheClosestSuffix return null, it means there is no more similar word under this node
                     //So we deduct the last letter of the word, and pass it to the suggest function again
-                    String wholeWord = currentPrefix + node.prefix;
-                    return suggest(wholeWord.substring(0, wholeWord.length() - 2), numSuggestions, root, "");
+                    String wholeWord = currentPrefix + word;
+                    System.out.println(wholeWord);
+                    return suggest(wholeWord.substring(0, wholeWord.length() - 1), numSuggestions, root, "");
                 }
-
             }
             return result;
         }
@@ -177,7 +177,7 @@ public class CompactPrefixTree implements Dictionary {
                     result[i] = currentPrefix + this.findTheClosestSuffix(node, result, currentPrefix);
                 else{
                     String wholeWord = currentPrefix + node.prefix;
-                    return suggest(wholeWord.substring(0, wholeWord.length() - 2), numSuggestions, root, "");
+                    return suggest(wholeWord.substring(0, wholeWord.length() - 1), numSuggestions, root, "");
                 }
 //
             }
@@ -471,6 +471,7 @@ public class CompactPrefixTree implements Dictionary {
         System.out.println("Hey: ");
         CompactPrefixTree b = new CompactPrefixTree("words_ospd.txt");
         System.out.println(b.checkPrefix("aa"));
+        System.out.println("forsoom".substring(0, "forsoom".length() - 1));
 
     }
 
